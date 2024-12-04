@@ -13,20 +13,19 @@ cloudinary.config({
 const zFormDataSchema = z.object({
   image: z.instanceof(FormData),
 });
+type UploadResult =
+  | { success: UploadApiResponse; error?: never }
+  | { error: string; success?: never };
 
 export const uploadImage = actionClient
   .schema(zFormDataSchema)
-  .action(async ({ parsedInput: { image } }) => {
+  .action(async ({ parsedInput: { image } }): Promise<UploadResult> => {
     const formImage = image.get("image");
 
     if (!formImage) return { error: "No image was provided" };
     if (!image) return { error: "No image provided" };
 
     const file = formImage as File;
-
-    type UploadResult =
-      | { success: UploadApiResponse; error?: never }
-      | { error: string; success?: never };
 
     try {
       const arrayBuffer = await file.arrayBuffer();
@@ -52,6 +51,6 @@ export const uploadImage = actionClient
       });
     } catch (error) {
       console.log("🚀 ~ .action ~ error:", error);
-      return { error: error };
+      return { error: error as string };
     }
   });

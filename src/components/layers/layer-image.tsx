@@ -3,7 +3,7 @@
 import { Layer } from "@/lib/layer-store";
 import Image from "next/image";
 
-export default function LayerComponent({ layer }: { layer: Layer }) {
+export default function LayerImage({ layer }: { layer: Layer }) {
   if (layer.url && layer.name) {
     return (
       <div className="w-12 h-12 items-center flex justify-center">

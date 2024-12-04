@@ -3,6 +3,7 @@ import React from "react";
 import UploadImage from "./upload/upoad-image";
 import Layers from "./layers/layers";
 import { ModeToggle } from "@/components/theme/mode-toggle";
+import ActiveImage from "./active-image";
 
 const Editor = () => {
   return (
@@ -13,6 +14,7 @@ const Editor = () => {
         </div>
       </div>
       <UploadImage />
+      <ActiveImage />
       <Layers />
     </div>
   );

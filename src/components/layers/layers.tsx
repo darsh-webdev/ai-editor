@@ -12,6 +12,7 @@ import { cn } from "@/lib/utils";
 import { useImageStore } from "@/lib/image-store";
 import { Button } from "../ui/button";
 import { Layers2 } from "lucide-react";
+import LayerImage from "./layer-image";
 
 export default function Layers() {
   const layers = useLayerStore((state) => state.layers);
@@ -36,12 +37,10 @@ export default function Layers() {
         {layers.map((layer, index) => (
           <div
             key={layer.id}
-            className={
-              (cn(
-                "cursor-pointer ease-in-out hover:bg-secondary border border-transparent"
-              ),
-              { "animate-pulse": generating })
-            }
+            className={cn(
+              "cursor-pointer ease-in-out hover:bg-secondary border border-transparent",
+              generating ? "active-pulse" : ""
+            )}
           >
             <div className="relative p-4 flex items-center">
               <div className="flex gap-2 items-center h-8 w-full justify-between">
@@ -50,6 +49,7 @@ export default function Layers() {
                     New Layer
                   </p>
                 ) : null}
+                <LayerImage layer={layer} />
               </div>
             </div>
           </div>
