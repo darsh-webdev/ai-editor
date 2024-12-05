@@ -13,10 +13,12 @@ import { useImageStore } from "@/lib/image-store";
 import { Button } from "../ui/button";
 import { Layers2 } from "lucide-react";
 import LayerImage from "./layer-image";
+import LayerInfo from "./layer-info";
 
 export default function Layers() {
   const layers = useLayerStore((state) => state.layers);
   const activeLayer = useLayerStore((state) => state.activeLayer);
+  const addLayer = useLayerStore((state) => state.addLayer);
   const generating = useImageStore((state) => state.generating);
 
   return (
@@ -50,13 +52,28 @@ export default function Layers() {
                   </p>
                 ) : null}
                 <LayerImage layer={layer} />
+                <LayerInfo layer={layer} layerIndex={index} />
               </div>
             </div>
           </div>
         ))}
       </CardContent>
       <div className="sticky bottom-0 bg-card flex gap-2 shrink-0">
-        <Button className="w-full flex gap-2" variant="outline">
+        <Button
+          onClick={() => {
+            addLayer({
+              id: crypto.randomUUID(),
+              url: "",
+              height: 0,
+              width: 0,
+              publicId: "",
+              name: "",
+              format: "",
+            });
+          }}
+          className="w-full flex gap-2"
+          variant="outline"
+        >
           <span>Create Layer</span>
           <Layers2 size={18} className="text-secondary-foreground" />
         </Button>
