@@ -13,6 +13,7 @@ cloudinary.config({
 const zFormDataSchema = z.object({
   image: z.instanceof(FormData),
 });
+
 type UploadResult =
   | { success: UploadApiResponse; error?: never }
   | { error: string; success?: never };

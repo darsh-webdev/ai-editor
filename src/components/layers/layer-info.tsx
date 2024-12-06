@@ -30,9 +30,11 @@ export default function LayerInfo({
         </Button>
       </DialogTrigger>
       <DialogContent>
-        <h3 className="text-lg font-medium text-center mb-2">
-          Layer {layer.id}
-        </h3>
+        <DialogHeader>
+          <DialogTitle></DialogTitle>
+          <DialogDescription></DialogDescription>
+        </DialogHeader>
+        <h3 className="text-lg font-medium text-center">Layer {layer.id}</h3>
         <div className="py-4 space-y-0.5">
           <p>
             <span className="font-bold">Filename:</span> {layer.name}

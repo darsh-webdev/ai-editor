@@ -18,12 +18,13 @@ import LayerInfo from "./layer-info";
 export default function Layers() {
   const layers = useLayerStore((state) => state.layers);
   const activeLayer = useLayerStore((state) => state.activeLayer);
+  const setActiveLayer = useLayerStore((state) => state.setActiveLayer);
   const addLayer = useLayerStore((state) => state.addLayer);
   const generating = useImageStore((state) => state.generating);
 
   return (
     <Card className="basis-[320px] shrink-0 scrollbar-thin scrollbar-track-secondary overflow-y-scroll scrollbar-thumb-primary scrollbar-thumb-rounded-full scrollbar-track-rounded-full overflow-x-hidden relative flex flex-col shadow-2xl">
-      <CardHeader className="">
+      <CardHeader className="sticky top-0 z-50 px-4 py-6 min-h-24 bg-card shadow-sm">
         <div>
           <CardTitle className="text-sm">
             {activeLayer.name || "Layers"}
@@ -39,9 +40,16 @@ export default function Layers() {
         {layers.map((layer, index) => (
           <div
             key={layer.id}
+            onClick={() => {
+              if (generating) return;
+              setActiveLayer(layer.id);
+            }}
             className={cn(
               "cursor-pointer ease-in-out hover:bg-secondary border border-transparent",
-              generating ? "active-pulse" : ""
+              {
+                "border-primary": activeLayer.id === layer.id,
+                "animate-pulse": generating,
+              }
             )}
           >
             <div className="relative p-4 flex items-center">
