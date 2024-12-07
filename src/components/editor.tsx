@@ -1,6 +1,5 @@
 "use client";
 import React from "react";
-import UploadImage from "./upload/upoad-image";
 import Layers from "./layers/layers";
 import { ModeToggle } from "@/components/theme/mode-toggle";
 import ActiveImage from "./active-image";

@@ -4,7 +4,7 @@ import { Card, CardContent } from "../ui/card";
 import { cn } from "@/lib/utils";
 import { useLayerStore } from "@/lib/layer-store";
 import { useState } from "react";
-import UploadImage from "./upoad-image";
+import UploadImage from "./upload-image";
 
 export default function UploadForm() {
   const activeLayer = useLayerStore((state) => state.activeLayer);
