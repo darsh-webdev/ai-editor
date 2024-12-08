@@ -11,9 +11,11 @@ import {
 import { cn } from "@/lib/utils";
 import { useImageStore } from "@/lib/image-store";
 import { Button } from "../ui/button";
-import { Layers2 } from "lucide-react";
+import { ArrowRight, Images, Layers2 } from "lucide-react";
 import LayerImage from "./layer-image";
 import LayerInfo from "./layer-info";
+import { useMemo } from "react";
+import Image from "next/image";
 
 export default function Layers() {
   const layers = useLayerStore((state) => state.layers);
@@ -21,10 +23,62 @@ export default function Layers() {
   const setActiveLayer = useLayerStore((state) => state.setActiveLayer);
   const addLayer = useLayerStore((state) => state.addLayer);
   const generating = useImageStore((state) => state.generating);
+  const layerComparisonMode = useLayerStore(
+    (state) => state.layerComparisonMode
+  );
+  const setLayerComparisonMode = useLayerStore(
+    (state) => state.setLayerComparisonMode
+  );
+  const comparedLayers = useLayerStore((state) => state.comparedLayers);
+  const toggleComparedLayer = useLayerStore(
+    (state) => state.toggleComparedLayer
+  );
+  const setComparedLayers = useLayerStore((state) => state.setComparedLayers);
+
+  const getLayerName = useMemo(
+    () => (id: string) => {
+      const layer = layers.find((l) => l.id === id);
+      return layer ? layer.url : "Nothing here";
+    },
+    [layers]
+  );
+
+  const visibleLayers = useMemo(
+    () =>
+      layerComparisonMode
+        ? layers.filter((layer) => layer.url && layer.resourceType === "image")
+        : layers,
+    [layerComparisonMode, layers]
+  );
 
   return (
-    <Card className="basis-[320px] shrink-0 scrollbar-thin scrollbar-track-secondary overflow-y-scroll scrollbar-thumb-primary scrollbar-thumb-rounded-full scrollbar-track-rounded-full overflow-x-hidden relative flex flex-col shadow-2xl">
+    <Card className="basis-[360px] shrink-0 scrollbar-thin scrollbar-track-secondary overflow-y-scroll scrollbar-thumb-primary scrollbar-thumb-rounded-full scrollbar-track-rounded-full overflow-x-hidden relative flex flex-col shadow-2xl">
       <CardHeader className="sticky top-0 z-50 px-4 py-6 min-h-24 bg-card shadow-sm">
+        {layerComparisonMode ? (
+          <div>
+            <CardTitle className="text-sm">Comparing..</CardTitle>
+            <CardDescription className="flex gap-2 items-center">
+              <Image
+                alt="compare"
+                width={32}
+                height={32}
+                src={getLayerName(comparedLayers[0]) as string}
+              />
+              {comparedLayers.length > 0 && <ArrowRight />}
+              {comparedLayers.length > 1 ? (
+                <Image
+                  alt="compare"
+                  width={32}
+                  height={32}
+                  src={getLayerName(comparedLayers[1]) as string}
+                />
+              ) : (
+                "Nothing here"
+              )}
+            </CardDescription>
+          </div>
+        ) : null}
+
         <div>
           <CardTitle className="text-sm">
             {activeLayer.name || "Layers"}
@@ -37,17 +91,23 @@ export default function Layers() {
         </div>
       </CardHeader>
       <CardContent className="flex-1 flex flex-col">
-        {layers.map((layer, index) => (
+        {visibleLayers.map((layer, index) => (
           <div
             key={layer.id}
             onClick={() => {
               if (generating) return;
-              setActiveLayer(layer.id);
+              if (layerComparisonMode) {
+                toggleComparedLayer(layer.id);
+              } else {
+                setActiveLayer(layer.id);
+              }
             }}
             className={cn(
               "cursor-pointer ease-in-out hover:bg-secondary border border-transparent",
               {
-                "border-primary": activeLayer.id === layer.id,
+                "border-primary": !layerComparisonMode
+                  ? activeLayer.id === layer.id
+                  : comparedLayers.includes(layer.id),
                 "animate-pulse": generating,
               }
             )}
@@ -66,7 +126,7 @@ export default function Layers() {
           </div>
         ))}
       </CardContent>
-      <div className="sticky bottom-0 bg-card flex gap-2 shrink-0">
+      <div className="sticky bottom-0 bg-card flex gap-2 p-4 shrink-0">
         <Button
           onClick={() => {
             addLayer({
@@ -84,6 +144,25 @@ export default function Layers() {
         >
           <span>Create Layer</span>
           <Layers2 size={18} className="text-secondary-foreground" />
+        </Button>
+        <Button
+          className=" flex items-center gap-2"
+          variant="outline"
+          disabled={!activeLayer.url || activeLayer.resourceType === "video"}
+          onClick={() => {
+            if (layerComparisonMode) {
+              setLayerComparisonMode(!layerComparisonMode);
+            } else {
+              setComparedLayers([activeLayer.id]);
+            }
+          }}
+        >
+          <span>
+            {layerComparisonMode ? "Stop Comparing" : "Compare Layers"}
+          </span>
+          {!layerComparisonMode && (
+            <Images className="text-secondary-foreground" size={14} />
+          )}
         </Button>
       </div>
     </Card>
