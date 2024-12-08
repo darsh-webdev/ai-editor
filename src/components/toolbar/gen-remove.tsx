@@ -8,11 +8,12 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "../ui/button";
-import { Eraser } from "lucide-react";
+import { Eraser, MessageCircleWarning, CheckCircle2 } from "lucide-react";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { useState } from "react";
 import { genRemove } from "@/server/gen-remove";
+import { toast } from "sonner";
 
 export default function GenRemove() {
   const setGenerating = useImageStore((state) => state.setGenerating);
@@ -68,6 +69,27 @@ export default function GenRemove() {
                 resourceType: "image",
               });
               setActiveLayer(newLayerId);
+              toast(`${activeTag.toUpperCase()} removed!`, {
+                dismissible: true,
+                icon: <CheckCircle2 className="mr-2 text-2xl text-green-400" />,
+                duration: 4000,
+                closeButton: true,
+              });
+            }
+
+            if (res?.serverError) {
+              setGenerating(false);
+              toast(
+                res?.serverError || `Error removing ${activeTag} from image`,
+                {
+                  dismissible: true,
+                  icon: (
+                    <MessageCircleWarning className="mr-4 text-2xl text-red-400" />
+                  ),
+                  duration: 4000,
+                  closeButton: true,
+                }
+              );
             }
           }}
           className="w-full mt-4"

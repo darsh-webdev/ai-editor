@@ -8,9 +8,10 @@ import {
   PopoverTrigger,
 } from "@/components/ui/popover";
 import { Button } from "../ui/button";
-import { Image } from "lucide-react";
+import { CheckCircle2, Image, MessageCircleWarning } from "lucide-react";
 
 import { bgRemove } from "@/server/bg-remove";
+import { toast } from "sonner";
 
 export default function BGRemove() {
   const setGenerating = useImageStore((state) => state.setGenerating);
@@ -59,10 +60,24 @@ export default function BGRemove() {
                 resourceType: "image",
               });
               setActiveLayer(newLayerId);
+              toast("Background removed", {
+                dismissible: true,
+                icon: <CheckCircle2 className="mr-2 text-2xl text-green-400" />,
+                duration: 4000,
+                closeButton: true,
+              });
             }
 
             if (res?.serverError) {
               setGenerating(false);
+              toast(res?.serverError || "Error removing background", {
+                dismissible: true,
+                icon: (
+                  <MessageCircleWarning className="mr-4 text-2xl text-red-400" />
+                ),
+                duration: 4000,
+                closeButton: true,
+              });
             }
           }}
           className="w-full mt-4"
