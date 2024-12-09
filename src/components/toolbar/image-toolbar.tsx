@@ -1,4 +1,5 @@
 import BGRemove from "./bg-remove";
+import BackgroundReplace from "./bg-replace";
 import GenRemove from "./gen-remove";
 
 export default function ImageTools() {
@@ -6,6 +7,7 @@ export default function ImageTools() {
     <>
       <GenRemove />
       <BGRemove />
+      <BackgroundReplace />
     </>
   );
 }
