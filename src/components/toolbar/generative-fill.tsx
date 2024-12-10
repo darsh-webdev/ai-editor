@@ -14,8 +14,9 @@ import { Input } from "../ui/input";
 import { useMemo, useState } from "react";
 import { toast } from "sonner";
 import { AnimatePresence, motion } from "framer-motion";
+import { genFill } from "@/server/gen-fill";
 
-const PREVIEW_SIZE = 250;
+const PREVIEW_SIZE = 300;
 const EXPANSION_THRESHOLD = 250;
 
 export default function GenerativeFill() {
@@ -98,7 +99,7 @@ export default function GenerativeFill() {
             initial={{ opacity: 0, scale: 0.5 }}
             animate={{ opacity: 1, scale: 1 }}
             exit={{ opacity: 0, scale: 0.5 }}
-            className="absolute bg-primary text-white px-2 py-1 rounded-md text-xs font-bold"
+            className="absolute bg-secondary text-primary px-2 py-1 rounded-md text-xs font-bold"
             style={position}
           >
             {Math.abs(value)}px
@@ -108,7 +109,48 @@ export default function GenerativeFill() {
     );
   };
 
-  const handleGenFill = () => {};
+  const handleGenFill = async () => {
+    const newLayerId = crypto.randomUUID();
+    setGenerating(true);
+
+    const res = await genFill({
+      activeImage: activeLayer.url!,
+      aspect: "1:1",
+      height: activeLayer.height! + height,
+      width: activeLayer.width! + width,
+    });
+
+    if (res?.data?.success) {
+      setGenerating(false);
+      addLayer({
+        id: newLayerId,
+        url: res.data.success,
+        format: activeLayer.format,
+        height: activeLayer.height! + height,
+        width: activeLayer.width! + width,
+        name: "genFill" + activeLayer.name,
+        publicId: activeLayer.publicId,
+        resourceType: "image",
+      });
+      setActiveLayer(newLayerId);
+      toast("Generated fill", {
+        dismissible: true,
+        icon: <CheckCircle2 className="mr-2 text-2xl text-green-400" />,
+        duration: 4000,
+        closeButton: true,
+      });
+    }
+
+    if (res?.serverError) {
+      setGenerating(false);
+      toast(res?.serverError || "Error generating fill for image", {
+        dismissible: true,
+        icon: <MessageCircleWarning className="mr-4 text-2xl text-red-400" />,
+        duration: 4000,
+        closeButton: true,
+      });
+    }
+  };
 
   return (
     <Popover>
