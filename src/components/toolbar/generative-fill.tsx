@@ -155,13 +155,13 @@ export default function GenerativeFill() {
   return (
     <Popover>
       <PopoverTrigger disabled={!activeLayer?.url} asChild>
-        <Button variant="outline" className="p-8">
-          <span className="flex gap-1 items-center justify-center flex-col text-xs">
-            Generative Fill <Crop size={20} />
+        <Button variant="outline" className="p-4">
+          <span className="flex gap-1 items-center justify-center text-xs">
+            <Crop size={20} /> Generative Fill
           </span>
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-full">
+      <PopoverContent className="w-full h-full">
         <div className="mb-2 flex flex-col h-full">
           <div className="pb-4">
             <h3>Generative Fill</h3>

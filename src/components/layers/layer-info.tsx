@@ -26,7 +26,7 @@ export default function LayerInfo({
     <Dialog>
       <DialogTrigger asChild>
         <Button variant="outline">
-          <EllipsisIcon size={14} />
+          <EllipsisIcon size={4} />
         </Button>
       </DialogTrigger>
       <DialogContent>

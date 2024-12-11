@@ -23,9 +23,9 @@ export default function BGRemove() {
   return (
     <Popover>
       <PopoverTrigger disabled={!activeLayer?.url} asChild>
-        <Button variant="outline" className="p-8">
-          <span className="flex gap-1 items-center justify-center flex-col text-xs">
-            BG Removal <Image size={20} />
+        <Button variant="outline" className="p-4">
+          <span className="flex gap-1 items-center justify-center text-xs">
+            <Image size={20} /> BG Removal
           </span>
         </Button>
       </PopoverTrigger>
