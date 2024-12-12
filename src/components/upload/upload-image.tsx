@@ -5,6 +5,8 @@ import { Card, CardContent } from "../ui/card";
 import { cn } from "@/lib/utils";
 import { useImageStore } from "@/lib/image-store";
 import { useLayerStore } from "@/lib/layer-store";
+import { toast } from "sonner";
+import { CheckCircle2, MessageCircleWarning } from "lucide-react";
 
 const UploadImage = () => {
   const setGenerating = useImageStore((state) => state.setGenerating);
@@ -58,9 +60,23 @@ const UploadImage = () => {
 
           setActiveLayer(activeLayer.id);
           setGenerating(false);
+          toast("Image uploaded successfully", {
+            dismissible: true,
+            icon: <CheckCircle2 className="mr-2 text-2xl text-green-400" />,
+            duration: 4000,
+            closeButton: true,
+          });
         }
         if (res?.data?.error) {
           setGenerating(false);
+          toast(res?.serverError || "Error uploading image", {
+            dismissible: true,
+            icon: (
+              <MessageCircleWarning className="mr-4 text-2xl text-red-400" />
+            ),
+            duration: 4000,
+            closeButton: true,
+          });
         }
       }
     },
