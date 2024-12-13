@@ -7,6 +7,8 @@ import { useImageStore } from "@/lib/image-store";
 import { useLayerStore } from "@/lib/layer-store";
 import { toast } from "sonner";
 import { CheckCircle2, MessageCircleWarning } from "lucide-react";
+import Lottie from "lottie-react";
+import ImageAnimation from "../../../public/animations/image-upload.json";
 
 const UploadImage = () => {
   const setGenerating = useImageStore((state) => state.setGenerating);
@@ -95,6 +97,7 @@ const UploadImage = () => {
           <input {...getInputProps()} type="text" />
           <div className="flex items-center justify-center flex-col gap-2">
             <p className="text-muted-foreground text-2xl">
+              <Lottie className="h-48" animationData={ImageAnimation} />
               {isDragActive
                 ? "Drop your image here"
                 : "Start by uploading an image"}
