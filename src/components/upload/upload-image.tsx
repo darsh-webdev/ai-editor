@@ -96,12 +96,12 @@ const UploadImage = () => {
         <CardContent className="flex flex-col h-full items-center justify-center px-2 py-24 text-xs">
           <input {...getInputProps()} type="text" />
           <div className="flex items-center justify-center flex-col gap-2">
-            <p className="text-muted-foreground text-2xl">
+            <div className="text-muted-foreground text-2xl">
               <Lottie className="h-48" animationData={ImageAnimation} />
               {isDragActive
                 ? "Drop your image here"
                 : "Start by uploading an image"}
-            </p>
+            </div>
             <p className="text-muted-foreground">
               Supported formats .jpeg .jpg .png .webp
             </p>
