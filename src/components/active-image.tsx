@@ -30,11 +30,13 @@ export default function ActiveImage() {
       )}
       {layer.resourceType === "video" && (
         <video
-          src={layer.transcriptionURL || layer.url}
           width={layer.width}
           height={layer.height}
           className="rounded-lg object-contain max-w-full max-h-full"
-        />
+          controls
+        >
+          <source src={layer.transcriptionURL || layer.url} type="video/webm" />
+        </video>
       )}
     </div>
   );
