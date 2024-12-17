@@ -8,6 +8,7 @@ import { useLayerStore } from "@/lib/layer-store";
 import ImageTools from "./toolbar/image-toolbar";
 import Loading from "./loading-screen";
 import VideoTools from "./toolbar/video-toolbar";
+import ExportAsset from "./toolbar/export";
 
 const Editor = () => {
   const activeLayer = useLayerStore((state) => state.activeLayer);
@@ -24,6 +25,7 @@ const Editor = () => {
           ) : (
             <VideoTools />
           )}
+          <ExportAsset resource={activeLayer.resourceType!} />
         </div>
       </div>
       <Loading />
